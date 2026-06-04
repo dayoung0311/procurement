@@ -17,7 +17,9 @@ public enum ErrorCode {
     // Vendor
     VENDOR_NOT_FOUND(HttpStatus.NOT_FOUND, "V001", "공급사를 찾을 수 없습니다."),
     VENDOR_CODE_DUPLICATED(HttpStatus.CONFLICT, "V002", "이미 존재하는 공급사 코드입니다."),
-    VENDOR_INACTIVE(HttpStatus.BAD_REQUEST, "V003", "비활성화된 공급사입니다.");
+    VENDOR_INACTIVE(HttpStatus.BAD_REQUEST, "V003", "비활성화된 공급사입니다."),
+    VENDOR_CODE_INVALID(HttpStatus.BAD_REQUEST, "V004", "공급사 코드 형식이 올바르지 않습니다."),
+    VENDOR_NAME_REQUIRED(HttpStatus.BAD_REQUEST, "V005", "공급사명은 필수입니다.");
 
 
     private final HttpStatus httpStatus;
