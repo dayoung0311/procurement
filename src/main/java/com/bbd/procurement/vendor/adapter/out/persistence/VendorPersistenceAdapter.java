@@ -6,6 +6,7 @@ import com.bbd.procurement.vendor.domain.Vendor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
 import java.util.Optional;
 
 @Component
@@ -28,4 +29,7 @@ public class VendorPersistenceAdapter implements SaveVendorPort, LoadVendorPort 
     public boolean existsByCode(String code) {
         return vendorJpaRepository.existsByCode(code);
     }
+
+    @Override
+    public List<Vendor> findAll() { return vendorJpaRepository.findAll(); }
 }
