@@ -35,7 +35,7 @@ public class VendorService implements
         String code = vendorCodeGeneratorPort.generate();
 
         if (loadVendorPort.existsByCode(code)) {
-            throw new ApiException(ErrorCode.VENDOR_CODE_DUPLICATED, "코드" + code + "중복");
+            throw new ApiException(ErrorCode.VENDOR_CODE_DUPLICATED);
         }
 
         Vendor vendor = Vendor.create(code, command.name(), command.contact(), command.terms());
@@ -74,6 +74,6 @@ public class VendorService implements
 
     private Vendor findVendorOrThrow(String code) {
         return loadVendorPort.findByCode(code)
-                .orElseThrow(() -> new ApiException(ErrorCode.VENDOR_NOT_FOUND, "code=" + code));
+                .orElseThrow(() -> new ApiException(ErrorCode.VENDOR_NOT_FOUND));
     }
 }

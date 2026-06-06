@@ -72,7 +72,7 @@ public class Vendor extends BaseTimeEntity {
 
     private static void validateCode(String code) {
         if (!StringUtils.hasText(code) || !code.matches("^V\\d{6}$")) {
-            throw new ApiException(ErrorCode.VENDOR_CODE_INVALID, "공급사 코드 형식이 올바르지 않습니다.:" + code);
+            throw new ApiException(ErrorCode.VENDOR_CODE_INVALID);
         }
     }
 
