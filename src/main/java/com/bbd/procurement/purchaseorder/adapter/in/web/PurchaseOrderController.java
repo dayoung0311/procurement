@@ -65,7 +65,7 @@ public class PurchaseOrderController {
     }
 
     @Operation(
-            summary = "PO 라인 교체," ,
+            summary = "PO 라인 교체" ,
             description = "DRAFT 상태의 PO 라인 전체 교체 | 권한: HQ_MANAGER, HQ_STAFF"
     )
     @PutMapping("/{poNumber}/lines")
