@@ -20,7 +20,7 @@ public record SalesOrderResponse(
         @JsonProperty("approved_at") String approvedAt,
         @JsonProperty("canceled_at") String canceledAt,
         @JsonProperty("received_at") String receivedAt,
-        @JsonProperty("total_amount") String totalAmount,
+        @JsonProperty("total_amount") long totalAmount,
         String note,
         List<Line> lines
 ) {

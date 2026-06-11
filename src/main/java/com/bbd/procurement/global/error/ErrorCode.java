@@ -35,7 +35,11 @@ public enum ErrorCode {
 
     // Item
     ITEM_NOT_FOUND(HttpStatus.NOT_FOUND, "I001", "해당 SKU의 부품을 찾을 수 없습니다."),
-    ITEM_SERVICE_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "I002", "Item 서비스 호출에 실패했습니다.");
+    ITEM_SERVICE_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "I002", "Item 서비스 호출에 실패했습니다."),
+
+    // Sales
+    SO_NOT_FOUND(HttpStatus.NOT_FOUND, "S001", "해당 번호의 SO를 찾을 수 없습니다."),
+    SALES_SERVICE_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "S002", "Sales 서비스 호출에 실패했습니다.");
 
     private final HttpStatus httpStatus;
     private final String code;
