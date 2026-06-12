@@ -7,6 +7,7 @@ import com.bbd.procurement.global.auth.UserPrincipal;
 import com.bbd.procurement.purchaseorder.adapter.in.web.request.RegisterPurchaseOrderRequest;
 import com.bbd.procurement.purchaseorder.adapter.in.web.request.UpdatePurchaseOrderHeaderRequest;
 import com.bbd.procurement.purchaseorder.adapter.in.web.request.UpdatePurchaseOrderLinesRequest;
+import com.bbd.procurement.purchaseorder.adapter.in.web.response.PurchaseOrderHistoryResponse;
 import com.bbd.procurement.purchaseorder.adapter.in.web.response.PurchaseOrderResponse;
 import com.bbd.procurement.purchaseorder.adapter.in.web.response.PurchaseOrderSummaryResponse;
 import com.bbd.procurement.purchaseorder.application.port.in.*;
@@ -21,6 +22,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import tools.jackson.databind.ObjectMapper;
 
 import java.util.List;
 
@@ -37,6 +39,8 @@ public class PurchaseOrderController {
     private final CancelPurchaseOrderUseCase cancelPurchaseOrderUseCase;
     private final GetPurchaseOrderQuery getPurchaseOrderQuery;
     private final ListPurchaseOrderQuery listPurchaseOrderQuery;
+    private final GetPurchaseOrderHistoryQuery getPurchaseOrderHistoryQuery;
+    private final ObjectMapper objectMapper;
 
     @Operation(
             summary = "PO 작성",
@@ -65,7 +69,8 @@ public class PurchaseOrderController {
             @PathVariable String poNumber,
             @Valid @RequestBody UpdatePurchaseOrderHeaderRequest request
             ) {
-        PurchaseOrder po = updatePurchaseOrderHeaderUseCase.updateHeader(request.toCommand(poNumber));
+        String updatedBy = UserContextHolder.current().userId();
+        PurchaseOrder po = updatePurchaseOrderHeaderUseCase.updateHeader(request.toCommand(poNumber, updatedBy));
         return ApiResponse.success(PurchaseOrderResponse.from(po));
     }
 
@@ -80,7 +85,8 @@ public class PurchaseOrderController {
             @PathVariable String poNumber,
             @Valid @RequestBody UpdatePurchaseOrderLinesRequest request
             ) {
-        PurchaseOrder po = updatePurchaseOrderLinesUseCase.updateLines(request.toCommand(poNumber));
+        String updatedBy = UserContextHolder.current().userId();
+        PurchaseOrder po = updatePurchaseOrderLinesUseCase.updateLines(request.toCommand(poNumber, updatedBy));
         return ApiResponse.success(PurchaseOrderResponse.from(po));
     }
 
@@ -142,6 +148,23 @@ public class PurchaseOrderController {
         List<PurchaseOrderSummaryResponse> result =
                 listPurchaseOrderQuery.list().stream()
                         .map(PurchaseOrderSummaryResponse::from)
+                        .toList();
+        return ApiResponse.success(result);
+    }
+
+    @Operation(
+            summary = "PO 변경 이력 조회",
+            description = "PO의 생성·수정·완료·취소 이력을 시간순으로 조회 | 권한: HQ_MANAGER, HQ_STAFF"
+    )
+    @GetMapping("/{poNumber}/history")
+    @HasRole({Role.HQ_STAFF, Role.HQ_MANAGER})
+    public ApiResponse<List<PurchaseOrderHistoryResponse>> getHistory(
+            @Parameter(description = "PO 번호", example = "PO-2026-000001")
+            @PathVariable String poNumber
+    ) {
+        List<PurchaseOrderHistoryResponse> result =
+                getPurchaseOrderHistoryQuery.getHistory(poNumber).stream()
+                        .map(history -> PurchaseOrderHistoryResponse.from(history, objectMapper))
                         .toList();
         return ApiResponse.success(result);
     }
