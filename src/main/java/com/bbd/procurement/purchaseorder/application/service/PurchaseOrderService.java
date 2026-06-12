@@ -38,7 +38,8 @@ public class PurchaseOrderService implements
         CompletePurchaseOrderUseCase,
         CancelPurchaseOrderUseCase,
         GetPurchaseOrderQuery,
-        ListPurchaseOrderQuery {
+        ListPurchaseOrderQuery,
+        GetPurchaseOrderHistoryQuery{
 
     private final SavePurchaseOrderPort savePurchaseOrderPort;
     private final LoadPurchaseOrderPort loadPurchaseOrderPort;
@@ -132,6 +133,12 @@ public class PurchaseOrderService implements
     private PurchaseOrder findPurchaseOrderOrThrow(String poNumber) {
         return loadPurchaseOrderPort.findByPoNumber(poNumber)
                 .orElseThrow(() -> new ApiException(ErrorCode.PO_NOT_FOUND));
+    }
+
+    @Override
+    public List<PurchaseOrderHistory> getHistory(String poNumber) {
+        findPurchaseOrderOrThrow(poNumber);
+        return loadPurchaseOrderHistoryPort.findByPoNumber(poNumber);
     }
 
     private List<PurchaseOrderLine> toLines(List<PurchaseOrderLineItem> items) {
