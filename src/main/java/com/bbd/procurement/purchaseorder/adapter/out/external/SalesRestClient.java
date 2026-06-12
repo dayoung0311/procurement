@@ -9,7 +9,7 @@ public class SalesRestClient {
 
     private final RestClient restClient;
 
-    public SalesRestClient(@Value("{sales.base-url}") String baseUrl) {
+    public SalesRestClient(@Value("${sales.base-url}") String baseUrl) {
         this.restClient = RestClient.builder()
                 .baseUrl(baseUrl)
                 .build();
