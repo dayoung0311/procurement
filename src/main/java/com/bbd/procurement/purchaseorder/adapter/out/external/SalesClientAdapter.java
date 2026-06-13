@@ -4,21 +4,15 @@ import com.bbd.procurement.global.error.ApiException;
 import com.bbd.procurement.global.error.ErrorCode;
 import com.bbd.procurement.purchaseorder.application.port.out.LoadSalesOrderPort;
 import com.bbd.procurement.purchaseorder.application.port.out.result.SalesOrderResult;
-import org.springframework.beans.factory.annotation.Value;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.HttpClientErrorException;
-import org.springframework.web.client.RestClient;
 
 @Component
-public class SalesRestClient implements LoadSalesOrderPort {
+@RequiredArgsConstructor
+public class SalesClientAdapter implements LoadSalesOrderPort {
 
-    private final RestClient restClient;
-
-    public SalesRestClient(@Value("${sales.base-url}") String baseUrl) {
-        this.restClient = RestClient.builder()
-                .baseUrl(baseUrl)
-                .build();
-    }
+    private final SalesHttpService salesHttpService;
 
     @Override
     public SalesOrderResult findBySoNumber(String soNumber) {
@@ -28,10 +22,7 @@ public class SalesRestClient implements LoadSalesOrderPort {
 
     private SalesOrderResponse getSalesOrder(String soNumber) {
         try {
-            return restClient.get()
-                    .uri("/api/v1/sales-orders/{soNumber}", soNumber)
-                    .retrieve()
-                    .body(SalesOrderResponse.class);
+            return salesHttpService.getSalesOrder(soNumber);
         } catch (HttpClientErrorException.NotFound e) {
             throw new ApiException(ErrorCode.SO_NOT_FOUND);
         } catch (Exception e) {
