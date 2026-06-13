@@ -1,6 +1,7 @@
 package com.bbd.procurement.global.config;
 
 import com.bbd.procurement.purchaseorder.adapter.out.external.ItemHttpService;
+import com.bbd.procurement.purchaseorder.adapter.out.external.SalesHttpService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -14,6 +15,11 @@ public class HttpServiceConfig {
     @Bean
     public ItemHttpService itemHttpService(@Value("${item.base-url}") String baseUrl) {
         return proxyFactory(baseUrl).createClient(ItemHttpService.class);
+    }
+
+    @Bean
+    public SalesHttpService salesHttpService(@Value("${sales.base-url}") String baseUrl) {
+        return proxyFactory(baseUrl).createClient(SalesHttpService.class);
     }
 
     private HttpServiceProxyFactory proxyFactory(String baseUrl) {
