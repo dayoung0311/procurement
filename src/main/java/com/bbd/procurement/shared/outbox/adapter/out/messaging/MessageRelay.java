@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 @Slf4j
 @Component
@@ -18,6 +19,7 @@ import java.util.List;
 public class MessageRelay {
 
     private static final int BATCH_SIZE = 100;
+    private static final long KAFKA_SEND_TIMEOUT_SECONDS = 10L;
 
     private final OutboxEventJpaRepository outboxEventJpaRepository;
     private final KafkaTemplate<String, String> kafkaTemplate;
@@ -38,6 +40,11 @@ public class MessageRelay {
             try {
                 publish(event);
                 event.markProcessed();
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+                log.error("Relay interrupted while publishing id={} eventId={}",
+                        event.getId(), event.getEventId(), e);
+                break;
             } catch (Exception e) {
                 log.error("Failed to publish outbox event id={} eventId={}",
                         event.getId(), event.getEventId(), e);
@@ -45,8 +52,9 @@ public class MessageRelay {
         }
     }
 
-    private void publish(OutboxEvent event) {
-        kafkaTemplate.send(event.getTopic(), event.getAggregateId(), event.getPayload());
+    private void publish(OutboxEvent event) throws Exception{
+        kafkaTemplate.send(event.getTopic(), event.getAggregateId(), event.getPayload())
+                        .get(KAFKA_SEND_TIMEOUT_SECONDS, TimeUnit.SECONDS);
         log.info("Publishing event: eventId={} topic={} key={}",
                 event.getEventId(),
                 event.getTopic(),
