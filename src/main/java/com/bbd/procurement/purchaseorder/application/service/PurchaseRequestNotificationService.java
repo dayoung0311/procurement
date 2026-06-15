@@ -1,15 +1,12 @@
 package com.bbd.procurement.purchaseorder.application.service;
 
 import com.bbd.procurement.purchaseorder.adapter.in.messaging.event.PurchaseRequested;
-import com.bbd.procurement.purchaseorder.adapter.out.persistence.PurchaseRequestNotificationJpaRepository;
 import com.bbd.procurement.purchaseorder.application.port.in.GetPurchaseRequestNotificationQuery;
 import com.bbd.procurement.purchaseorder.application.port.in.HandlePurchaseRequestedUseCase;
 import com.bbd.procurement.purchaseorder.application.port.out.LoadPurchaseRequestNotificationPort;
 import com.bbd.procurement.purchaseorder.application.port.out.SavePurchaseRequestNotificationPort;
 import com.bbd.procurement.purchaseorder.domain.PurchaseRequestNotification;
-import com.bbd.procurement.shared.inbox.adapter.out.persistence.ProcessedEventJpaRepository;
 import com.bbd.procurement.shared.inbox.application.port.out.ProcessedEventPort;
-import com.bbd.procurement.shared.inbox.domain.ProcessedEvent;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
