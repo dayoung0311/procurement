@@ -13,7 +13,7 @@ public record PurchaseRequested(
 ) {
     public record Line(
             String sku,
-            String quantity
+            int quantity
     ) {
 
     }

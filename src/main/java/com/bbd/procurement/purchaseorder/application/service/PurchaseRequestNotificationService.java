@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import tools.jackson.databind.ObjectMapper;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Slf4j
 @Service
@@ -43,5 +44,10 @@ public class PurchaseRequestNotificationService {
         processedEventJpaRepository.save(ProcessedEvent.of(event.eventId()));
 
         log.info("Saved purchase-request notification eventId={} soNumber={}", event.eventId(), event.soNumber());
+    }
+
+    @Transactional(readOnly = true)
+    public List<PurchaseRequestNotification> list() {
+        return purchaseRequestNotificationJpaRepository.findAllByOrderByReceivedAtDesc();
     }
 }
