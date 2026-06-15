@@ -11,14 +11,14 @@ spring:
       enabled: true
 
   datasource:
-    url: jdbc:postgresql://localhost:5432/procurement
-    username: procurement
-    password: procurement
+    url: ${DB_ENDPOINT:jdbc:postgresql://localhost:5432/procurement}
+    username: ${DB_NAME:procurement}
+    password: ${DB_PASSWORD:procurement}
     driver-class-name: org.postgresql.Driver
 
   jpa:
     hibernate:
-      ddl-auto: validate
+      ddl-auto: update
     properties:
       hibernate:
         show_sql: true
@@ -51,7 +51,14 @@ springdoc:
     url: /procurement/v3/api-docs
 
 item:
-  base-url: http://localhost:8082/item
+  base-url: ${ITEM_SERVICE_BASE_URL:http://bbd-item:8080/item}
 
 sales:
-  base-url: http://localhost:8085/sales
+  base-url: ${SALES_SERVICE_BASE_URL:http://bbd-sales:8080/sales}
+
+logging:
+  level:
+    root: info
+    org.hibernate.SQL: debug
+    org.hibernate.orm.jdbc.bind: trace
+
