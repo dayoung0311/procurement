@@ -27,7 +27,7 @@ public class PurchaseOrderHistory {
     @Column(name = "before_payload", columnDefinition = "TEXT", updatable = false)
     private String beforePayload;
 
-    @Column(name = "after_payload", nullable = false, length = 20, updatable = false)
+    @Column(name = "after_payload", nullable = false, columnDefinition = "TEXT", updatable = false)
     private String afterPayload;
 
     @Column(name = "changed_by", nullable = false, length = 20, updatable = false)
