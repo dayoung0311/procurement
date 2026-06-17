@@ -16,14 +16,14 @@ java {
 repositories {
 	mavenCentral()
 
-//	maven {
-//		name = "GitHubPackages"
-//		url = uri("https://maven.pkg.github.com/BBD-AES/bbd-security-core")
-//		credentials {
-//			username = findProperty("gpr.user") ?: System.getenv("GITHUB_USERNAME")
-//			password = findProperty("gpr.key") ?: System.getenv("GITHUB_TOKEN")
-//		}
-//	}
+	maven {
+		name = "GitHubPackages"
+		url = uri("https://maven.pkg.github.com/BBD-AES/bbd-security-core")
+		credentials {
+			username = findProperty("gpr.user") ?: System.getenv("GITHUB_USERNAME")
+			password = findProperty("gpr.key") ?: System.getenv("GITHUB_TOKEN")
+		}
+	}
 }
 
 dependencies {
@@ -57,8 +57,8 @@ dependencies {
 	// kafka
 	implementation 'org.springframework.boot:spring-boot-starter-kafka'
 
-	// user framework
-//	implementation 'com.bbd:bbd-security-core:0.0.2'
+	// security-core
+	implementation 'com.bbd:bbd-security-core:0.0.4'
 }
 
 tasks.named('test') {
