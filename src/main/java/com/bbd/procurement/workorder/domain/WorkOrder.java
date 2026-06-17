@@ -57,7 +57,7 @@ public class WorkOrder extends BaseTimeEntity {
         this.workOrderNumber = workOrderNumber;
         this.soNumber = soNumber;
         this.warehouseCode = warehouseCode;
-        this.completedBy = createdBy;
+        this.createdBy = createdBy;
         this.status = WorkOrderStatus.PLANNED;
         this.totalAmount = BigDecimal.ZERO;
     }
