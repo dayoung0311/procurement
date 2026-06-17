@@ -32,7 +32,7 @@ public class PurchaseOrder extends BaseTimeEntity {
     @Column(name = "vendor_code", nullable = false, length = 10)
     private String vendorCode;
 
-    @Column(name = "warehouse_code", nullable = false, length = 20)
+    @Column(name = "warehouse_code", nullable = false, length = 255)
     private String warehouseCode;
 
     @Enumerated(EnumType.STRING)
@@ -48,10 +48,10 @@ public class PurchaseOrder extends BaseTimeEntity {
     @Column(name = "note", columnDefinition = "TEXT")
     private String note;
 
-    @Column(name = "created_by", nullable = false, length = 20, updatable = false)
+    @Column(name = "created_by", nullable = false, length = 255, updatable = false)
     private String createdBy;
 
-    @Column(name = "received_by", length = 20)
+    @Column(name = "received_by", length = 255)
     private String receivedBy;
 
     @Column(name = "received_at")
