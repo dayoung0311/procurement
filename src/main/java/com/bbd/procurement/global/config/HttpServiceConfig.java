@@ -8,8 +8,29 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.client.RestClient;
 import org.springframework.web.client.support.RestClientAdapter;
 import org.springframework.web.service.invoker.HttpServiceProxyFactory;
+import org.springframework.web.service.registry.ImportHttpServices;
 
 @Configuration
+@ImportHttpServices(
+        group = "bbd-user-service",
+        types = ItemHttpService.class
+)
+@ImportHttpServices(
+        group = "bbd-item-service",
+        types = ItemHttpService.class
+)
+@ImportHttpServices(
+        group = "bbd-inventory-service",
+        types = ItemHttpService.class
+)
+@ImportHttpServices(
+        group = "bbd-procurement-service",
+        types = SalesHttpService.class
+)
+@ImportHttpServices(
+        group = "bbd-sales-service",
+        types = SalesHttpService.class
+)
 public class HttpServiceConfig {
 
     @Bean
