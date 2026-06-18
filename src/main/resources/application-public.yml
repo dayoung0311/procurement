@@ -96,3 +96,15 @@ logging:
     root: info
     org.hibernate.SQL: debug
     org.hibernate.orm.jdbc.bind: trace
+
+bbd:
+  security:
+    enabled: true
+    permit-all-paths:
+      - /health
+      - /health/**
+      - /actuator/health
+      - /actuator/health/**
+      - /swagger-ui/**
+      - /swagger-ui.html
+      - /v3/api-docs/**

@@ -71,6 +71,8 @@ bbd:
   security:
     enabled: true
     permit-all-paths:
+      - /health
+      - /health/**
       - /actuator/health
       - /actuator/health/**
       - /swagger-ui/**
