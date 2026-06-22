@@ -11,6 +11,7 @@ import com.bbd.procurement.vendor.application.port.out.SaveVendorPort;
 import com.bbd.procurement.vendor.application.port.out.VendorCodeGeneratorPort;
 import com.bbd.procurement.vendor.domain.Vendor;
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -33,13 +34,12 @@ public class VendorService implements
     @Transactional
     public Vendor register(RegisterVendorCommand command) {
         String code = vendorCodeGeneratorPort.generate();
-
-        if (loadVendorPort.existsByCode(code)) {
+        Vendor vendor = Vendor.create(code, command.name(), command.contact(), command.terms());
+        try {
+            return saveVendorPort.save(vendor);
+        } catch (DataIntegrityViolationException e) {
             throw new ApiException(ErrorCode.VENDOR_CODE_DUPLICATED);
         }
-
-        Vendor vendor = Vendor.create(code, command.name(), command.contact(), command.terms());
-        return saveVendorPort.save(vendor);
     }
 
     @Override

@@ -9,8 +9,6 @@ public interface LoadVendorPort {
 
     Optional<Vendor> findByCode(String code);
 
-    boolean existsByCode(String code);
-
     List<Vendor> findAll();
 
 }
