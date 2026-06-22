@@ -29,6 +29,7 @@ public enum ErrorCode {
     PO_LINE_REQUIRED(HttpStatus.BAD_REQUEST, "P005", "PO에 최소 1개 이상의 라인이 필요합니다."),
     PO_LINE_INVALID(HttpStatus.BAD_REQUEST, "P006", "PO 라인 항목이 올바르지 않습니다."),
     PO_DUPLICATE_REQUEST(HttpStatus.CONFLICT, "P007", "이미 접수된 주문입니다."),
+    PO_FIELD_INVALID(HttpStatus.BAD_REQUEST, "P008", "PO 필드 값이 올바르지 않습니다."),
 
     // Item
     ITEM_NOT_FOUND(HttpStatus.NOT_FOUND, "I001", "해당 SKU의 부품을 찾을 수 없습니다."),
