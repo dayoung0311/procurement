@@ -82,14 +82,14 @@ class PurchaseOrderTest {
         }
 
         @Test
-        @DisplayName("receivedBy가 null이면 PO_INVALID_STATE_TRANSITION 예외")
+        @DisplayName("receivedBy가 null이면 PO_FIELD_INVALID 예외")
         void receivedBy_누락이면_예외() {
             PurchaseOrder po = draftWithOneLine();
 
             assertThatThrownBy(() -> po.markReceived(null))
                     .isInstanceOf(ApiException.class)
                     .extracting(e -> ((ApiException) e).getErrorCode())
-                    .isEqualTo(ErrorCode.PO_INVALID_STATE_TRANSITION);
+                    .isEqualTo(ErrorCode.PO_FIELD_INVALID);
         }
     }
 
@@ -179,7 +179,7 @@ class PurchaseOrderTest {
                     "PO-26-1", "V001", "WH-HQ-001", null, null, "note", List.of(), 1L, null))
                     .isInstanceOf(ApiException.class)
                     .extracting(e -> ((ApiException) e).getErrorCode())
-                    .isEqualTo(ErrorCode.PO_INVALID_STATE_TRANSITION);
+                    .isEqualTo(ErrorCode.PO_FIELD_INVALID);
         }
 
         @Test
@@ -189,7 +189,7 @@ class PurchaseOrderTest {
                     VALID_PO, "", "WH-HQ-001", null, null, "note", List.of(), 1L, null))
                     .isInstanceOf(ApiException.class)
                     .extracting(e -> ((ApiException) e).getErrorCode())
-                    .isEqualTo(ErrorCode.PO_INVALID_STATE_TRANSITION);
+                    .isEqualTo(ErrorCode.PO_FIELD_INVALID);
         }
 
         @Test
@@ -199,7 +199,7 @@ class PurchaseOrderTest {
                     VALID_PO, "V001", "WH-HQ-001", null, null, "note", List.of(), null, null))
                     .isInstanceOf(ApiException.class)
                     .extracting(e -> ((ApiException) e).getErrorCode())
-                    .isEqualTo(ErrorCode.PO_INVALID_STATE_TRANSITION);
+                    .isEqualTo(ErrorCode.PO_FIELD_INVALID);
         }
 
         @Test
