@@ -26,10 +26,5 @@ public class VendorPersistenceAdapter implements SaveVendorPort, LoadVendorPort 
     }
 
     @Override
-    public boolean existsByCode(String code) {
-        return vendorJpaRepository.existsByCode(code);
-    }
-
-    @Override
     public List<Vendor> findAll() { return vendorJpaRepository.findAll(); }
 }
