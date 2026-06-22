@@ -1,7 +1,6 @@
 package com.bbd.procurement.purchaseorder.adapter.in.web;
 
 import com.bbd.procurement.global.response.ApiResponse;
-import com.bbd.procurement.purchaseorder.adapter.in.web.response.PurchaseOrderResponseAssembler;
 import com.bbd.procurement.purchaseorder.adapter.in.web.response.PurchaseRequestNotificationResponse;
 import com.bbd.procurement.purchaseorder.application.port.in.GetPurchaseRequestNotificationQuery;
 import com.bbd.securitycore.adapter.in.annotation.RequireRole;
@@ -22,7 +21,6 @@ import java.util.List;
 public class PurchaseRequestController {
 
     private final GetPurchaseRequestNotificationQuery getPurchaseRequestNotificationQuery;
-    private final PurchaseOrderResponseAssembler responseAssembler;
 
     @Operation(
             summary = "발주 요청 알림 목록 조회",
@@ -32,7 +30,7 @@ public class PurchaseRequestController {
     @GetMapping
     public ApiResponse<List<PurchaseRequestNotificationResponse>> list() {
         List<PurchaseRequestNotificationResponse> result = getPurchaseRequestNotificationQuery.list().stream()
-                .map(responseAssembler::toNotificationResponse)
+                .map(PurchaseRequestNotificationResponse::from)
                 .toList();
         return ApiResponse.success(result);
     }
