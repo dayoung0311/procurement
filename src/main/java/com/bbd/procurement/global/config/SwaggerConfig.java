@@ -1,5 +1,7 @@
 package com.bbd.procurement.global.config;
 
+import com.bbd.securitycore.idempotency.Idempotent;
+import io.swagger.v3.oas.models.Operation;
 import io.swagger.v3.oas.models.parameters.Parameter;
 import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;
@@ -8,6 +10,7 @@ import io.swagger.v3.oas.models.media.StringSchema;
 import io.swagger.v3.oas.models.security.SecurityRequirement;
 import io.swagger.v3.oas.models.security.SecurityScheme;
 import io.swagger.v3.oas.models.servers.Server;
+import org.springdoc.core.customizers.OperationCustomizer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -70,5 +73,28 @@ public class SwaggerConfig {
                 .security(List.of(
                         new SecurityRequirement().addList(BEARER_AUTH)
                 ));
+    }
+
+    /**
+     * @Idempotent 가 붙은 모든 엔드포인트에 Idempotency-Key 헤더 파라미터를 자동으로 노출한다.
+     * components.parameters("IdempotencyKeyHeader") 정의는 "부품 등록"일 뿐이라, 이렇게
+     * 각 operation 에 $ref 로 조립해줘야 Swagger 에 입력란이 뜬다.
+     * 이미 컨트롤러에서 @RequestHeader("Idempotency-Key") 로 직접 선언한 경우(작성 등)는 중복 추가하지 않는다.
+     */
+    @Bean
+    public OperationCustomizer idempotencyKeyHeaderCustomizer() {
+        return (Operation operation, org.springframework.web.method.HandlerMethod handlerMethod) -> {
+            if (!handlerMethod.hasMethodAnnotation(Idempotent.class)) {
+                return operation;
+            }
+            boolean alreadyDeclared = operation.getParameters() != null
+                    && operation.getParameters().stream().anyMatch(p ->
+                            "Idempotency-Key".equals(p.getName()) && "header".equals(p.getIn()));
+            if (!alreadyDeclared) {
+                operation.addParametersItem(
+                        new Parameter().$ref("#/components/parameters/IdempotencyKeyHeader"));
+            }
+            return operation;
+        };
     }
 }
