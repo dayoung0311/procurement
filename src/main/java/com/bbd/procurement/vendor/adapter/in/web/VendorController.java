@@ -41,10 +41,9 @@ public class VendorController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public ApiResponse<VendorResponse> register(
-            @Valid @RequestBody RegisterVendorRequest request,
-            @RequestHeader(value = "Idempotency-Key", required = false) String idempotencyKey
+            @Valid @RequestBody RegisterVendorRequest request
     ) {
-        Vendor vendor = registerVendorUseCase.register(request.toCommand(idempotencyKey));
+        Vendor vendor = registerVendorUseCase.register(request.toCommand());
         return ApiResponse.success("공급사가 등록되었습니다.", VendorResponse.from(vendor));
     }
 

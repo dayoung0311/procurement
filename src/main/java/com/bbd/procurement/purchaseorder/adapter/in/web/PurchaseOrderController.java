@@ -55,11 +55,10 @@ public class PurchaseOrderController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public ApiResponse<PurchaseOrderResponse> register(
-            @Valid @RequestBody RegisterPurchaseOrderRequest request,
-            @RequestHeader(value = "Idempotency-Key", required = false) String idempotencyKey
+            @Valid @RequestBody RegisterPurchaseOrderRequest request
             ) {
         Long userId = getCurrentUserSnapshotUseCase.getCurrentUserSnapshot().userId();
-        PurchaseOrder po = registerPurchaseOrderUseCase.register(request.toCommand(userId, idempotencyKey));
+        PurchaseOrder po = registerPurchaseOrderUseCase.register(request.toCommand(userId));
         return ApiResponse.success("구매 주문이 작성되었습니다.",
                 PurchaseOrderResponse.from(po));
     }
