@@ -66,9 +66,9 @@ public class SwaggerConfig {
                                         .in("header")
                                         .name("Idempotency-Key")
                                         .required(false)
-                                        .description("멱등 처리를 위한 요청 고유 키. POST 또는 상태 변경 PATCH 요청에서 사용")
+                                        .description("멱등 처리를 위한 요청 고유 키")
                                         .schema(new StringSchema()
-                                                .example("018f4c2e-7b8a-7c2f-9a01-2d4e9b7c1234"))))
+                                                .example("멱등키 입력"))))
 
                 .security(List.of(
                         new SecurityRequirement().addList(BEARER_AUTH)
@@ -76,10 +76,10 @@ public class SwaggerConfig {
     }
 
     /**
-     * @Idempotent 가 붙은 모든 엔드포인트에 Idempotency-Key 헤더 파라미터를 자동으로 노출한다.
-     * components.parameters("IdempotencyKeyHeader") 정의는 "부품 등록"일 뿐이라, 이렇게
-     * 각 operation 에 $ref 로 조립해줘야 Swagger 에 입력란이 뜬다.
-     * 이미 컨트롤러에서 @RequestHeader("Idempotency-Key") 로 직접 선언한 경우(작성 등)는 중복 추가하지 않는다.
+     * @Idempotent 가 붙은 모든 엔드포인트에 Idempotency-Key 헤더 파라미터를 자동으로 노
+     * components.parameters("IdempotencyKeyHeader") 정의는 부품 등록일 뿐이라, 이렇게
+     * 각 operation 에 $ref 로 조립해줘야 Swagger 에 입력란이 뜸
+     * 이미 컨트롤러에서 @RequestHeader("Idempotency-Key") 로 직접 선언한 경우(작성 등)는 중복 추가하지 않음
      */
     @Bean
     public OperationCustomizer idempotencyKeyHeaderCustomizer() {
