@@ -11,55 +11,47 @@ spring:
 
   http:
     serviceclient:
-       bbd-user-service:
+      bbd-user-service:
         base-url: ${USER_SERVICE_BASE_URL:http://localhost:8081/user}
-       bbd-item-service:
-        base-url: ${ITEM_SERVICE_BASE_URL:http://localhost:8082/item}
+      bbd-item-service:
+        base-url: ${ITEM_SERVICE_BASE_URL:http://100.73.142.41/item}
         connect-timeout: 2s
         read-timeout: 5s
-       bbd-inventory-service:
-         base-url: ${INVENTORY_SERVICE_BASE_URL:http://localhost:8083/inventory}
-       bbd-procurement-service:
+      bbd-inventory-service:
+        base-url: ${INVENTORY_SERVICE_BASE_URL:http://localhost:8083/inventory}
+      bbd-procurement-service:
         base-url: ${PROCUREMENT_SERVICE_BASE_URL:http://localhost:8084/procurement}
-       bbd-sales-service:
+      bbd-sales-service:
         base-url: ${SALES_SERVICE_BASE_URL:http://localhost:8085/sales}
         connect-timeout: 2s
         read-timeout: 5s
 
-    data:
-      redis:
-        host: ${REDIS_HOST:localhost}
-        port: ${REDIS_PORT:6379}
-
-  bbd:
-    security:
-      enabled: true
-      permit-all-paths:
-        - /actuator/health
-        - /actuator/health/**
-        - /swagger-ui/**
-        - /swagger-ui.html
-        - /v3/api-docs/**
+  data:
+    redis:
+      host: ${REDIS_HOST:localhost}
+      port: ${REDIS_PORT:6379}
+      ssl:
+        enabled: true
 
   application:
     name: procurement
 
   threads:
     virtual:
-      enabled: true # Java 21 Virtual Thread 사용
+      enabled: true
 
   datasource:
-    url: ${DB_ENDPOINT}
-    username: ${DB_NAME}
-    password: ${DB_PASSWORD}
+    url: ${DB_ENDPOINT:jdbc:postgresql://localhost:5432/procurement}
+    username: ${DB_NAME:procurement}
+    password: ${DB_PASSWORD:procurement}
     driver-class-name: org.postgresql.Driver
 
   jpa:
     hibernate:
       ddl-auto: update
-    show-sql: false
     properties:
       hibernate:
+        show_sql: true
         format_sql: true
         use_sql_comments: true
         jdbc:
@@ -81,26 +73,6 @@ spring:
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
       value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
 
-# Swagger
-springdoc:
-  swagger-ui:
-    tags-sorter: alpha
-    operations-sorter: alpha
-    url: /procurement/v3/api-docs
-    config-url: /procurement/v3/api-docs/swagger-config
-
-item:
-  base-url: ${ITEM_SERVICE_BASE_URL:http://100.73.142.41/item}
-
-sales:
-  base-url: ${SALES_SERVICE_BASE_URL:http://sales:8080/sales}
-
-logging:
-  level:
-    root: info
-    org.hibernate.SQL: warn
-    org.hibernate.orm.jdbc.bind: warn
-
 bbd:
   security:
     enabled: true
@@ -112,3 +84,23 @@ bbd:
       - /swagger-ui/**
       - /swagger-ui.html
       - /v3/api-docs/**
+
+springdoc:
+  swagger-ui:
+    tags-sorter: alpha
+    operations-sorter: alpha
+    config-url: /procurement/v3/api-docs/swagger-config
+    url: /procurement/v3/api-docs
+
+item:
+  base-url: ${ITEM_SERVICE_BASE_URL:http://bbd-item:8080/item}
+
+sales:
+  base-url: ${SALES_SERVICE_BASE_URL:http://bbd-sales:8080/sales}
+
+logging:
+  level:
+    root: info
+    org.hibernate.SQL: warn
+    org.hibernate.orm.jdbc.bind: warn
+
